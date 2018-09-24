@@ -7,17 +7,20 @@
 */
 const TOKEN = "pk.eyJ1Ijoia2FzYWx1b3FpIiwiYSI6ImNqbHZ2OW53bTB5aHozcW9kcDJibndycXUifQ.SeWM7HbI0owT-Rwuv14Ntg";
 var locations = [];
+
 // The first step is obtain all the latitude and longitude from the HTML
 // The below is a simple jQuery selector
 $(".coordinates").each(function () {
     var longitude = $(".longitude", this).text().trim();
     var latitude = $(".latitude", this).text().trim();
     var name = $(".name", this).text().trim();
+    var id = $(".id", this).text().trim();
     // Create a point data structure to hold the values.
     var point = {
         "latitude": latitude,
         "longitude": longitude,
-        "name": name
+        "name": name,
+        "id": id
     };
     // Push them all into an array.
     locations.push(point);
@@ -29,6 +32,7 @@ for (i = 0; i < locations.length; i++) {
         "type": "Feature",
         "properties": {
             "name": locations[i].name,
+            "id": locations[i].id,
             "icon": "circle-15"
         },
         "geometry": {
@@ -77,6 +81,7 @@ map.on('load', function () {
     map.on('click', 'places', function (e) {
         var coordinates = e.features[0].geometry.coordinates.slice();
         var name = e.features[0].properties.name;
+        var id = e.features[0].properties.id;
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
         // over the copy being pointed to.
@@ -92,7 +97,7 @@ map.on('load', function () {
         document.getElementById('reserve')
             .addEventListener('click', function () {
                 console.log("Reserve");
-                Reserve(name, coordinates);
+                Reserve(id, coordinates);
             });
 
     });
@@ -106,7 +111,8 @@ map.on('load', function () {
     });
 });
 
-function Reserve(name, coordinates) {
+function Reserve(id, coordinates) {
+    location.href = "/reservations/Create?id=" + id;
     console.log('try to reserve coords', name, coordinates);
 
 }

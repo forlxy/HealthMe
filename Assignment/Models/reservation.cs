@@ -18,6 +18,12 @@ namespace Assignment.Models
         [StringLength(128)]
         public string user_id { get; set; }
 
+        [Column(TypeName = "date")]
+        public DateTime startDate { get; set; }
+
+        [Column(TypeName = "date")]
+        public DateTime endDate { get; set; }
+
         public virtual AspNetUser AspNetUser { get; set; }
 
         public virtual location location { get; set; }
