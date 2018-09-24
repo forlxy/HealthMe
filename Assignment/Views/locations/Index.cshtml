@@ -11,6 +11,8 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
 <table class="table">
     <tr>
         <th>
@@ -27,26 +29,26 @@
 
     @foreach (var item in Model)
     {
-    <tr class="coordinates">
-        <td class="latitude">
-            @Html.DisplayFor(modelItem => item.latitude)
-        </td>
-        <td class="longitude">
-            @Html.DisplayFor(modelItem => item.longitude)
-        </td>
-        <td class="name">
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td class="id">
-            @Html.DisplayFor(modelItem => item.id)
-        </td>
-        <td>
+        <tr class="coordinates">
+            <td class="latitude">
+                @Html.DisplayFor(modelItem => item.latitude)
+            </td>
+            <td class="longitude">
+                @Html.DisplayFor(modelItem => item.longitude)
+            </td>
+            <td class="name">
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td class="id">
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
 
-            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.id })
-        </td>
-    </tr>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
     }
 
 </table>
