@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Assignment.Models;
+using Assignment.Utility;
 
 namespace Assignment.Controllers
 {
@@ -44,6 +45,7 @@ namespace Assignment.Controllers
             String s = Request.QueryString["id"];
             int i = -1;
             Int32.TryParse(s, out i);
+            ViewBag.id = db.reservations.Count() == 0 ? 0 : (db.reservations.Max(r => r.id) + 1);
             ViewBag.user_id = new SelectList(db.AspNetUsers, "Id", "Email");
             ViewBag.location_id = new SelectList(db.locations, "id", "name");
             if (s != null)
@@ -63,15 +65,37 @@ namespace Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.reservations.Add(reservation);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    String toEmail = db.AspNetUsers.Find(reservation.user_id).Email;
+                    String subject = "Your Reservation has been successfully added in list!";
+                    String contents = "Your Reservation has been successfully added in list! You can now check more detail in your reservation page.";
+
+                    EmailSender es = new EmailSender();
+                    es.Send(toEmail, subject, contents);
+
+                    ViewBag.Result = "Email has been send.";
+
+                    ModelState.Clear();
+
+                    db.reservations.Add(reservation);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ViewBag.user_id = new SelectList(db.AspNetUsers, "Id", "Email", reservation.user_id);
+                    ViewBag.location_id = new SelectList(db.locations, "id", "name", reservation.location_id);
+                    return View(reservation);
+                }
             }
 
             ViewBag.user_id = new SelectList(db.AspNetUsers, "Id", "Email", reservation.user_id);
             ViewBag.location_id = new SelectList(db.locations, "id", "name", reservation.location_id);
             return View(reservation);
         }
+
 
         // GET: reservations/Edit/5
         public ActionResult Edit(int? id)

@@ -5,6 +5,7 @@ namespace Assignment.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Threading;
 
     [Table("location")]
     public partial class location
@@ -12,9 +13,10 @@ namespace Assignment.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public location()
         {
+            //Interlocked.Increment(ref nextId);
             reservations = new HashSet<reservation>();
         }
-
+        
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
 

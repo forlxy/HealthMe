@@ -28,6 +28,14 @@ namespace Assignment
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendar").Include(
+                        "~/Scripts/jquery-3.3.1.min.js",
+                        "~/Scripts/moment.min.js",
+                        "~/Scripts/fullcalendar/fullcalendar.js",
+                        "~/Scripts/calendar.js"
+                        ));
+
         }
     }
 }

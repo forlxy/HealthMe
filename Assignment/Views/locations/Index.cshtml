@@ -7,11 +7,70 @@
 
 <h2>Index</h2>
 <div id="map" style="height:300px"></div>
+<div id='geocoder' class='geocoder'></div>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src='https://npmcdn.com/@('@')turf/turf/turf.min.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css' type='text/css' />
+
+
+<form role="form" action="/wohoo" method="POST">
+    <label>Form a trip</label>
+    <div class="multi-field-wrapper">
+        <div class="multi-fields">
+            <div class="multi-field">
+                @Html.DropDownList("location", null, htmlAttributes: new { @class = "form-control" })
+                <button type="button" class="remove-field">Remove</button>
+            </div>
+        </div>
+        <button type="button" class="add-field">Add New Location</button>
+    </div>
+</form>
+<button type="button" id="form-trip">Form Trip</button>
+<button type="button" id="save-trip">Save Trip</button>
+
+
+<script>
+    $('.multi-field-wrapper').each(function () {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function (e) {
+            $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('location').val('').focus();
+        });
+        $('.multi-field .remove-field', $wrapper).click(function () {
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.multi-field').remove();
+        });
+    });
+    document.getElementById('form-trip')
+        .addEventListener('click', function () {
+            console.log("form a trip");
+            var list = $('.multi-field-wrapper .multi-field .form-control');
+            for (var e of list) {
+                clearDropoff();
+                var value = e.options[e.selectedIndex].value;
+                var lat, lng;
+                $.ajax({
+                    url: '@Url.Action("getLatLng", "locations")',
+                    type: 'POST',
+                    data: "{id:'" + value + "'}",
+                    contentType: 'Application/json',
+                    success: function(result)
+                    {
+                        var array = result.split(";");
+                        newDropoff([array[0], array[1]]);
+                    }
+                });
+
+            }
+
+
+        });
+
+</script>
 
 <table class="table">
     <tr>
