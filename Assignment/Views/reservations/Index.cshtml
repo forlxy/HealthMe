@@ -7,48 +7,70 @@
 
 <h2>Index</h2>
 
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/fullcalendar/fullcalendar.js"></script>
+
+<link href="~/Scripts/fullcalendar/fullcalendar.css" rel="stylesheet" />
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<link rel='stylesheet' type='text/css' href='fullcalendar.css' />
 <div id="calendar"></div>
-<div style="display: none">
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.location.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.startDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.endDate)
-            </th>
-            <th></th>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.location.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.startDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.endDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="reservations">
+            <td class="title">
+                @Html.DisplayFor(modelItem => item.location.name)
+            </td>
+            <td class="start">
+                @Html.DisplayFor(modelItem => item.startDate)
+            </td>
+            <td class="end">
+                @Html.DisplayFor(modelItem => item.endDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
         </tr>
+    }
 
-        @foreach (var item in Model)
-        {
-            <tr class="events">
-                <td class="title">
-                    @Html.DisplayFor(modelItem => item.location.name)
-                </td>
-                <td class="start">
-                    @Html.DisplayFor(modelItem => item.startDate)
-                </td>
-                <td class="end">
-                    @Html.DisplayFor(modelItem => item.endDate)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
-                </td>
-            </tr>
-        }
+</table>
 
-    </table>
-</div>
-@section Scripts {
-    @Scripts.Render("~/bundles/fullcalendar")
-}
+
+<script>
+    var events = [];
+
+    $(".reservations").each(function () {
+        var title = $(".title", this).text().trim();
+        var start = $(".start", this).text().trim();
+        start = moment(start, ["DD/MM/YYYY", "YYYY/MM/DD"]).format('YYYY/MM/DD hh:mm');
+        var event = {
+            "title": title,
+            "start": start
+        };
+        events.push(event);
+    });
+
+    $("#calendar").fullCalendar({
+        locale: 'au',
+        events: events
+    });
+
+</script>

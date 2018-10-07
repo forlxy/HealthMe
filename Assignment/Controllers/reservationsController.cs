@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Assignment.Models;
 using Assignment.Utility;
+using Microsoft.AspNet.Identity;
 
 namespace Assignment.Controllers
 {
@@ -16,11 +17,13 @@ namespace Assignment.Controllers
         private Health db = new Health();
         private location selected;
 
-       
+
         // GET: reservations
+        [Authorize]
         public ActionResult Index()
         {
-            var reservations = db.reservations.Include(r => r.AspNetUser).Include(r => r.location);
+            var userId = User.Identity.GetUserId();
+            var reservations = db.reservations.Include(r => r.AspNetUser).Include(r => r.location).Where(r => r.user_id == userId).ToList();
             return View(reservations.ToList());
         }
 
@@ -40,6 +43,7 @@ namespace Assignment.Controllers
         }
 
         // GET: reservations/Create
+        [Authorize]
         public ActionResult Create()
         {
             String s = Request.QueryString["id"];
@@ -61,8 +65,13 @@ namespace Assignment.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "id,location_id,user_id,startDate,endDate")] reservation reservation)
         {
+            reservation.user_id = User.Identity.GetUserId();
+            ModelState.Clear();
+            TryValidateModel(reservation);
+
             if (ModelState.IsValid)
             {
                 try
@@ -119,6 +128,7 @@ namespace Assignment.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "id,location_id,user_id,startDate,endDate")] reservation reservation)
         {
             if (ModelState.IsValid)

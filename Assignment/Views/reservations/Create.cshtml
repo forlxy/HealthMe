@@ -12,14 +12,14 @@
     @Html.AntiForgeryToken()
 
     <script src="~/Scripts/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <script src="~/Scripts/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" />
 
     <script type="text/javascript">
         $(document).ready(function () {
             $(".date-picker").datepicker({
-                format: 'dd-M-yyyy',
-
+                format: "dd-MM-yyyy"
             }).on('changeDate', function (selected) {
                 startDate = new Date(selected.date.valueOf());
                 startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
@@ -27,7 +27,7 @@
             });
 
             $(".date-picker2").datepicker({
-                format: 'dd-M-yyyy'
+                format: "dd-MM-yyyy"
             }).on('changeDate', function (selected) {
                 FromEndDate = new Date(selected.date.valueOf());
                 FromEndDate.setDate(FromEndDate.getDate(new Date(selected.date.valueOf())));

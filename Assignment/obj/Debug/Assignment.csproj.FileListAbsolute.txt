@@ -237,7 +237,6 @@ C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.c
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.csproj.CopyComplete
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.pdb
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.csprojAssemblyReference.cache
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Net.Http.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Algorithms.dll
@@ -246,3 +245,4 @@ C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cr
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.X509Certificates.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.pdb
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.xml
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.csprojAssemblyReference.cache
