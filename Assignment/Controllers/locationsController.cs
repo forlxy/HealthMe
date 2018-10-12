@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Xml;
 using Assignment.Models;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ namespace Assignment.Controllers
         // GET: locations
         public ActionResult Index()
         {
+            ViewBag.route_id = new SelectList(db.routes, "id", "name");
             ViewBag.location = new SelectList(db.locations, "id", "name");
             return View(db.locations.ToList());
         }
@@ -66,7 +68,7 @@ namespace Assignment.Controllers
             return View();
         }
 
-        public String getLatLng(string id)
+        public String getLatLng(string id, string counter)
         {
             //string id = Request.Params["hdnfldVariable"];
             int i = 0;
@@ -74,10 +76,10 @@ namespace Assignment.Controllers
             {
                 i = -1;
             }
-            return db.locations.Find(i).latitude+";"+ db.locations.Find(i).longitude;
+            return db.locations.Find(i).latitude+";"+ db.locations.Find(i).longitude+";"+ counter;
         }
 
-        public String saveJson(string value)
+        public String saveJson(string value, string name)
         {
             using (var webClient = new WebClient())
             {
@@ -89,6 +91,7 @@ namespace Assignment.Controllers
                 newRoute.id = db.routes.Count() == 0 ? 0 : (db.routes.Max(l => l.id) + 1);
                 newRoute.length = 1; 
                 newRoute.numOfLocation = coords.Count;
+                newRoute.name = name;
 
                 db.routes.Add(newRoute);
                 db.SaveChanges();
@@ -117,6 +120,51 @@ namespace Assignment.Controllers
                 //Rate = Convert.ToDecimal(x.Value.ToString()) });
 
         }
+
+
+        public Object getTrip(string route_id)
+        {
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Health"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                command.CommandText = "select * from point where @route_id = route_id ORDER BY id ASC";
+                command.Parameters.AddWithValue("@route_id", route_id);
+                SqlDataReader reader = command.ExecuteReader();
+
+                List<double[]> coordinates = new List<double[]>();
+                while (reader.Read())//如果有该用户名
+                {
+                    double latitude = reader.GetDouble(1);
+                    double longitude = reader.GetDouble(2);
+                    double[] cord = new double[2];
+                    cord[0] = longitude;
+                    cord[1] = latitude;
+                    coordinates.Add(cord);
+                }
+                var geometry = new { coordinates = coordinates, type = "LineString"};
+                //coordinates
+                if (connection.State != System.Data.ConnectionState.Closed)
+                {
+                    connection.Close();
+                    connection.Dispose();
+                }
+                var json = new JavaScriptSerializer().Serialize(geometry);
+                return json;
+            }
+
+
+
+            //var states = ((JObject)value["states"]["2009"]).Properties().Select(x => new { StateCode = x.Name,
+            //Rate = Convert.ToDecimal(x.Value.ToString()) });
+
+        }
+
         // POST: locations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.

@@ -58,19 +58,21 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v9',
     //style: 'mapbox://styles/mapbox/light-v9',
-    zoom: 11
+    center: [145.045837, -37.876823],
+    zoom: 13
 });
 
 
 document.getElementById('save-trip')
     .addEventListener('click', function () {
+        var name = document.getElementById('trip-name').value;
         $.ajax({
             url: 'locations/saveJson',
             type: 'POST',
-            data: "{value:'" + url + "'}",
+            data: "{value:'" + url + "',name:'" + name + "'}",
             contentType: 'application/json',
             success: function (result) {
-                
+                window.alert("Successfully Saved!");
             }
         });
     });
@@ -211,7 +213,8 @@ map.on('load', function () {
         }
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML('<h2>' + name + '</h2> <button type = "content" id=\'add\' value=\'Add\'>Add to List</button> </button>')
+            .setHTML('<html> <head><style>.button {    background-color: #4CAF50; /* Green */    border: none;    color: white;    padding: 8px 16px;    text-align: center;    text-decoration: none;    display: inline-block;    font-size: 16px;    margin: 4px 2px;    -webkit-transition-duration: 0.4s; /* Safari */    transition-duration: 0.4s;    cursor: pointer;} .button1 {    background-color: #4CAF50;     color: white;     border: 2px solid #4CAF50;}.button1:hover {    background-color: white;    color: black;}</style></head> <body><h2>' + name + '</h2> <button type = "content" id=\'add\' value=\'Add\' class= \'button button1\'>Add to List</button></body></html>')
+ //           .setHTML('<h2>' + name + '</h2> <button type = "content" id=\'add\' value=\'Add\'>Add to List</button> </button>')
             //            .setHTML('<h2>' + name + '</h2> <div class="container"> <div class="hero-unit"> <input type="text" placeholder="default" id="Demo"> </div> </div> <script src="~/Scripts/jquery-3.3.1.js"></script> <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js" ></script>  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" /> <script type="text/javascript"> $(document).ready(function () { $(\'#Demo\').datepicker({format: "dd/mm/yyyy"});$(\'#Demo\').datepicker(\'setDate\', new Date(2018, 7, 20));}); </script>')
             //            .setHTML('<h2>' + name + '</h2> <input id="datepicker" name="datepicker" placeholder="date" type="text"> <script> $(function () {$("#datepicker").datepicker();});</script> <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script> <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />')
             .addTo(map);
@@ -237,7 +240,8 @@ map.on('load', function () {
         }
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML('<h2>' + name + '</h2> <button type = "content" id=\'reserve\' value=\'Reserve\'>Reserve</button> </button>')
+            .setHTML('<html> <head><style>.button {    background-color: #4CAF50; /* Green */    border: none;    color: white;    padding: 8px 16px;    text-align: center;    text-decoration: none;    display: inline-block;    font-size: 16px;    margin: 4px 2px;    -webkit-transition-duration: 0.4s; /* Safari */    transition-duration: 0.4s;    cursor: pointer;} .button1 {    background-color: #4CAF50;     color: white;     border: 2px solid #4CAF50;}.button1:hover {    background-color: white;    color: black;}</style></head> <body><h2>' + name + '</h2> <button type = "content" id=\'reserve\' value=\'Reserve\' class= \'button button1\'>Reserve</button></body></html>')
+// <button type = "content" id=\'reserve\' value=\'Reserve\'>Reserve</button> 
             //            .setHTML('<h2>' + name + '</h2> <div class="container"> <div class="hero-unit"> <input type="text" placeholder="default" id="Demo"> </div> </div> <script src="~/Scripts/jquery-3.3.1.js"></script> <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js" ></script>  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" /> <script type="text/javascript"> $(document).ready(function () { $(\'#Demo\').datepicker({format: "dd/mm/yyyy"});$(\'#Demo\').datepicker(\'setDate\', new Date(2018, 7, 20));}); </script>')
             //            .setHTML('<h2>' + name + '</h2> <input id="datepicker" name="datepicker" placeholder="date" type="text"> <script> $(function () {$("#datepicker").datepicker();});</script> <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script> <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />')
             .addTo(map);
@@ -330,41 +334,65 @@ function clearDropoff() {
     dropoffs = turf.featureCollection([]);
     pointHopper = {};
 }
-function newDropoff(coords) {
+
+function showSavedTrip(data) {
+        var routeGeoJSON = turf.featureCollection([turf.feature(data)]);
+        // If there is no route provided, reset
+        
+        map.getSource('route')
+           .setData(routeGeoJSON);
+        var point = data.coordinates[0];
+        map.flyTo({
+            center: point,
+            zoom: 14
+        });
+        
+}
+
+var allCounter = 0;
+function newDropoff(coords, counter, length) {
     // Store the clicked point as a new GeoJSON feature with
     // two properties: `orderTime` and `key`
     var pt = turf.point(
         [parseFloat(coords[1]), parseFloat(coords[0])],
         {
             orderTime: Date.now(),
-            key: Math.random()
+            key: counter
         }
     );
     dropoffs.features.push(pt);
     pointHopper[pt.properties.key] = pt;
+    allCounter++;
+    if (allCounter == length) {
+        // Make a request to the Optimization API
+        allCounter = 0;
+        $.ajax({
+            method: 'GET',
+            url: assembleQueryURL(),
+        }).done(function (data) {
+            // Create a GeoJSON feature collection
+            var routeGeoJSON = turf.featureCollection([turf.feature(data.trips[0].geometry)]);
+            // If there is no route provided, reset
+            if (!data.trips[0]) {
+                routeGeoJSON = nothing;
+            } else {
+                // Update the `route` source by getting the route source
+                // and setting the data equal to routeGeoJSON
 
-    // Make a request to the Optimization API
-    $.ajax({
-        method: 'GET',
-        url: assembleQueryURL(),
-    }).done(function (data) {
-        // Create a GeoJSON feature collection
-        var routeGeoJSON = turf.featureCollection([turf.feature(data.trips[0].geometry)]);
-        // If there is no route provided, reset
-        if (!data.trips[0]) {
-            routeGeoJSON = nothing;
-        } else {
-            // Update the `route` source by getting the route source
-            // and setting the data equal to routeGeoJSON
-            
-            map.getSource('route')
-                .setData(routeGeoJSON);
-        }
+                map.getSource('route')
+                    .setData(routeGeoJSON);
+                var point = data.trips[0].geometry.coordinates[0];
+                map.flyTo({
+                    center: point,
+                    zoom: 14
+                });
+            }
 
-        if (data.waypoints.length === 12) {
-            window.alert('Maximum number of points reached. Read more at mapbox.com/api-documentation/#optimization.');
-        }
-    });
+            if (data.waypoints.length === 12) {
+                window.alert('Maximum number of points reached. Read more at mapbox.com/api-documentation/#optimization.');
+            }
+        });
+    }
 }
 
 function updateDropoffs(geojson) {

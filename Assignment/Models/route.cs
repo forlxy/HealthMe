@@ -18,9 +18,13 @@ namespace Assignment.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
 
+        [Required]
         public double length { get; set; }
 
+        [Required]
         public int numOfLocation { get; set; }
+
+        public string name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Point> Points { get; set; }

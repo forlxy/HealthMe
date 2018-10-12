@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Assignment.Models;
 using Assignment.Utility;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity;
+
 
 namespace Assignment.Controllers
 {
@@ -63,6 +65,42 @@ namespace Assignment.Controllers
         // POST: reservations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
+        public bool checkDateInRange(int location_id, DateTime time)
+        {
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Health"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                command.CommandText = "select * from reservation where @time BETWEEN startDate AND endDate AND @location_id=location_id";
+                command.Parameters.AddWithValue("@time", time);
+                command.Parameters.AddWithValue("@location_id", location_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())//如果有该用户名
+                {
+
+                    if (connection.State != System.Data.ConnectionState.Closed)
+                    {
+                        connection.Close();
+                        connection.Dispose();
+                    }
+                    return true;
+                }
+
+                if (connection.State != System.Data.ConnectionState.Closed)
+                {
+                    connection.Close();
+                    connection.Dispose();
+                }
+                return false;
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -74,6 +112,22 @@ namespace Assignment.Controllers
 
             if (ModelState.IsValid)
             {
+                if (checkDateInRange(reservation.location_id, reservation.startDate) )
+                {
+                    ViewBag.user_id = new SelectList(db.AspNetUsers, "Id", "Email", reservation.user_id);
+                    ViewBag.location_id = new SelectList(db.locations, "id", "name", reservation.location_id);
+                    ModelState.AddModelError("startDate", "This time has been already reservered!");
+                    return View(reservation);
+                }
+                if (checkDateInRange(reservation.location_id, reservation.endDate))
+                {
+                    ViewBag.user_id = new SelectList(db.AspNetUsers, "Id", "Email", reservation.user_id);
+                    ViewBag.location_id = new SelectList(db.locations, "id", "name", reservation.location_id);
+                    ModelState.AddModelError("endDate", "This time has been already reservered!");
+                    return View(reservation);
+                }
+
+                
                 try
                 {
                     String toEmail = db.AspNetUsers.Find(reservation.user_id).Email;
@@ -128,7 +182,8 @@ namespace Assignment.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize]
+
         public ActionResult Edit([Bind(Include = "id,location_id,user_id,startDate,endDate")] reservation reservation)
         {
             if (ModelState.IsValid)

@@ -12,10 +12,13 @@ namespace Assignment.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
 
+        [Required]
         public double latitude { get; set; }
 
+        [Required]
         public double longitude { get; set; }
 
+        [Required]
         public int route_id { get; set; }
 
         public virtual route route { get; set; }

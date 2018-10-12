@@ -195,7 +195,13 @@ C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\Microsoft.Owin.Sec
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\Newtonsoft.Json.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\Owin.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Net.Http.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Algorithms.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Encoding.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Primitives.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.X509Certificates.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Helpers.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Mvc.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Optimization.dll
@@ -204,6 +210,8 @@ C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.WebPage
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.WebPages.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.WebPages.Razor.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\WebGrease.dll
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.pdb
+C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.xml
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Helpers.xml
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Mvc.xml
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Web.Optimization.xml
@@ -237,12 +245,4 @@ C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.c
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.csproj.CopyComplete
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.dll
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.pdb
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Net.Http.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Algorithms.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Encoding.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.Primitives.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\System.Security.Cryptography.X509Certificates.dll
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.pdb
-C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\bin\SendGrid.xml
 C:\Users\kasal\source\repos\FIT5032_Assignment\Assignment\obj\Debug\Assignment.csprojAssemblyReference.cache
