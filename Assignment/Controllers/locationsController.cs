@@ -83,33 +83,43 @@ namespace Assignment.Controllers
         {
             using (var webClient = new WebClient())
             {
-                var jsonContent = webClient.DownloadString(value);
-                var SteamDetails = JsonConvert.DeserializeObject<dynamic>(jsonContent);
-                var coords = SteamDetails.trips[0].geometry.coordinates;
+                try { 
+                    var jsonContent = webClient.DownloadString(value);
+                    var SteamDetails = JsonConvert.DeserializeObject<dynamic>(jsonContent);
+                    var coords = SteamDetails.trips[0].geometry.coordinates;
+                    var distance = SteamDetails.trips[0].distance;
 
-                route newRoute = new route();
-                newRoute.id = db.routes.Count() == 0 ? 0 : (db.routes.Max(l => l.id) + 1);
-                newRoute.length = 1; 
-                newRoute.numOfLocation = coords.Count;
-                newRoute.name = name;
+                    if (distance == 0)
+                        return "Error";
 
-                db.routes.Add(newRoute);
-                db.SaveChanges();
-                foreach (var point in coords)
-                {
-                    Point newPoint = new Point();
-                    newPoint.id = db.Points.Count() == 0 ? 0 : (db.Points.Max(l => l.id) + 1);
-                    newPoint.latitude = point[1];
-                    newPoint.longitude = point[0];
-                    newPoint.route_id = newRoute.id;
+                    route newRoute = new route();
+                    newRoute.id = db.routes.Count() == 0 ? 0 : (db.routes.Max(l => l.id) + 1);
+                    newRoute.length = 1; 
+                    newRoute.numOfLocation = coords.Count;
+                    newRoute.name = name;
 
-                    db.routes.Find(newRoute.id).Points.Add(newPoint);
+                    db.routes.Add(newRoute);
+                    db.SaveChanges();
+                    foreach (var point in coords)
+                    {
+                        Point newPoint = new Point();
+                        newPoint.id = db.Points.Count() == 0 ? 0 : (db.Points.Max(l => l.id) + 1);
+                        newPoint.latitude = point[1];
+                        newPoint.longitude = point[0];
+                        newPoint.route_id = newRoute.id;
 
-                    db.Points.Add(newPoint);
+                        db.routes.Find(newRoute.id).Points.Add(newPoint);
+
+                        db.Points.Add(newPoint);
+                        db.SaveChanges();
+                    }
+                
                     db.SaveChanges();
                 }
-                
-                db.SaveChanges();
+                catch (WebException wex)
+                {
+                    return "Error";
+                }
 
 
             }
@@ -138,7 +148,7 @@ namespace Assignment.Controllers
                 SqlDataReader reader = command.ExecuteReader();
 
                 List<double[]> coordinates = new List<double[]>();
-                while (reader.Read())//如果有该用户名
+                while (reader.Read())
                 {
                     double latitude = reader.GetDouble(1);
                     double longitude = reader.GetDouble(2);

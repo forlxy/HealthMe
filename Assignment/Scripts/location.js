@@ -43,7 +43,7 @@ for (i = 0; i < locations.length; i++) {
         "properties": {
             "name": locations[i].name,
             "id": locations[i].id,
-            "icon": "circle-15"
+            "icon": "marker-15"
         },
         "geometry": {
             "type": "Point",
@@ -66,15 +66,28 @@ var map = new mapboxgl.Map({
 document.getElementById('save-trip')
     .addEventListener('click', function () {
         var name = document.getElementById('trip-name').value;
-        $.ajax({
-            url: 'locations/saveJson',
-            type: 'POST',
-            data: "{value:'" + url + "',name:'" + name + "'}",
-            contentType: 'application/json',
-            success: function (result) {
-                window.alert("Successfully Saved!");
-            }
-        });
+        if (name.length > 10)
+            window.alert("The length of trip name cannot exceed 10!");
+        else if (name.length == 0)
+            window.alert("The length of trip name cannot be 0!");
+        else {
+            $.ajax({
+                url: 'locations/saveJson',
+                type: 'POST',
+                data: "{value:'" + url + "',name:'" + name + "'}",
+                contentType: 'application/json',
+                success: function (result) {
+                    if (result == "Error") {
+                        window.alert("Your trip has not been loaded correctly!");
+                    }
+                    else {
+                        window.alert("Successfully Saved!");
+                        location.reload();
+                    }
+                }
+            });
+        }
+        
     });
 
 
@@ -371,6 +384,10 @@ function newDropoff(coords, counter, length) {
             url: assembleQueryURL(),
         }).done(function (data) {
             // Create a GeoJSON feature collection
+            if (data.trips[0].distance == 0) {
+                window.alert('Don\'t choose the same point to form a trip!');
+                return;
+            }
             var routeGeoJSON = turf.featureCollection([turf.feature(data.trips[0].geometry)]);
             // If there is no route provided, reset
             if (!data.trips[0]) {

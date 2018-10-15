@@ -24,6 +24,7 @@ namespace Assignment.Models
         [Required]
         public int numOfLocation { get; set; }
 
+        [Required]
         public string name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
