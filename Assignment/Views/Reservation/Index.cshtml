@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Assignment.Models.reservation>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-title" style="background-image: url(/Content/images/page-title.png)">
+    <h1>Reservation</h1>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/fullcalendar/fullcalendar.js"></script>
+
+<link href="~/Scripts/fullcalendar/fullcalendar.css" rel="stylesheet" />
+<div style="padding: 10px; text-align:center;">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.location.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.startDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.endDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="reservations">
+            <td class="title">
+                @Html.DisplayFor(modelItem => item.location.name)
+            </td>
+            <td class="start">
+                @Html.DisplayFor(modelItem => item.startDate)
+            </td>
+            <td class="end">
+                @Html.DisplayFor(modelItem => item.endDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }, new { @class = "btn btn-success" }) 
+                @Html.ActionLink("Details", "Details", new { id = item.id }, new { @class = "btn btn-info" }) 
+                @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+    }
+
+</table>

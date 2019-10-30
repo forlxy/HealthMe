@@ -66,22 +66,41 @@ var map = new mapboxgl.Map({
 document.getElementById('save-trip')
     .addEventListener('click', function () {
         var name = document.getElementById('trip-name').value;
-        if (name.length > 10)
-            window.alert("The length of trip name cannot exceed 10!");
-        else if (name.length == 0)
-            window.alert("The length of trip name cannot be 0!");
+        if (name.length > 10) {
+            $("#result_box").fadeOut(function () {
+                $("#result_count").html("The length of trip name cannot exceed 10!");
+            });
+            $("#result_box").fadeIn();
+        }           //window.alert("The length of trip name cannot exceed 10!");
+        else if (name.length === 0) {
+            $("#result_box").fadeOut(function () {
+                $("#result_count").html("The length of trip name cannot be 0!");
+            });
+            $("#result_box").fadeIn();
+        }
         else {
+            $("#result_box").fadeOut(function () {
+                $("#result_count").html("Saving...");
+            });
+            $("#result_box").fadeIn();
+
             $.ajax({
-                url: 'locations/saveJson',
+                url: 'location/saveJson',
                 type: 'POST',
                 data: "{value:'" + url + "',name:'" + name + "'}",
                 contentType: 'application/json',
                 success: function (result) {
-                    if (result == "Error") {
-                        window.alert("Your trip has not been loaded correctly!");
+                    if (result === "Error") {
+                        $("#result_box").fadeOut(function () {
+                            $("#result_count").html("Your trip has not been loaded correctly!");
+                        });
+                        $("#result_box").fadeIn();
                     }
                     else {
-                        window.alert("Successfully Saved!");
+                        $("#result_box").fadeOut(function () {
+                            $("#result_count").html("Successfully Saved!");
+                        });
+                        $("#result_box").fadeIn();
                         location.reload();
                     }
                 }
@@ -89,6 +108,25 @@ document.getElementById('save-trip')
         }
         
     });
+map.addControl(new MapboxDirections({
+    accessToken: mapboxgl.accessToken,
+    interactive: false
+}), 'top-left');
+
+
+var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken
+});
+
+map.addControl(geocoder);
+// Add geolocate control to the map.
+map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
+}));
+map.addControl(new mapboxgl.NavigationControl());
 
 
 map.on('load', function () {
@@ -102,23 +140,6 @@ map.on('load', function () {
         }
     });
 
-    var geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken
-    });
-
-    map.addControl(geocoder);
-    // Add geolocate control to the map.
-    map.addControl(new mapboxgl.GeolocateControl({
-        positionOptions: {
-            enableHighAccuracy: true
-        },
-        trackUserLocation: true
-    }));
-    map.addControl(new mapboxgl.NavigationControl());
-    
-    map.addControl(new MapboxDirections({
-        accessToken: mapboxgl.accessToken
-    }), 'top-left');
 
     map.addSource('route', {
         type: 'geojson',
@@ -253,7 +274,7 @@ map.on('load', function () {
         }
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML('<html> <head><style>.button {    background-color: #4CAF50; /* Green */    border: none;    color: white;    padding: 8px 16px;    text-align: center;    text-decoration: none;    display: inline-block;    font-size: 16px;    margin: 4px 2px;    -webkit-transition-duration: 0.4s; /* Safari */    transition-duration: 0.4s;    cursor: pointer;} .button1 {    background-color: #4CAF50;     color: white;     border: 2px solid #4CAF50;}.button1:hover {    background-color: white;    color: black;}</style></head> <body><h2>' + name + '</h2> <button type = "content" id=\'reserve\' value=\'Reserve\' class= \'button button1\'>Reserve</button></body></html>')
+            .setHTML('<html> <head><style>.button {    background-color: #4CAF50; /* Green */    border: none;    color: white;    padding: 8px 16px;    text-align: center;    text-decoration: none;    display: inline-block;    font-size: 16px;    margin: 4px 2px;    -webkit-transition-duration: 0.4s; /* Safari */    transition-duration: 0.4s;    cursor: pointer;} .button1 {    background-color: #4CAF50;     color: white;     border: 2px solid #4CAF50;}.button1:hover {    background-color: white;    color: black;}  .button2 {    background-color: #f44336;     color: white;     border: 2px solid #f44336;}.button2:hover {    background-color: white;    color: black;}</style></head> <body><h2>' + name + '</h2> <button type = "content" id=\'reserve\' value=\'Reserve\' class= \'button button1\'>Reserve</button> <button type = "content" id=\'delete\' value=\'Delete\' class= \'button button2\'>Delete</button></body></html>')
 // <button type = "content" id=\'reserve\' value=\'Reserve\'>Reserve</button> 
             //            .setHTML('<h2>' + name + '</h2> <div class="container"> <div class="hero-unit"> <input type="text" placeholder="default" id="Demo"> </div> </div> <script src="~/Scripts/jquery-3.3.1.js"></script> <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js" ></script>  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" /> <script type="text/javascript"> $(document).ready(function () { $(\'#Demo\').datepicker({format: "dd/mm/yyyy"});$(\'#Demo\').datepicker(\'setDate\', new Date(2018, 7, 20));}); </script>')
             //            .setHTML('<h2>' + name + '</h2> <input id="datepicker" name="datepicker" placeholder="date" type="text"> <script> $(function () {$("#datepicker").datepicker();});</script> <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script> <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />')
@@ -262,6 +283,12 @@ map.on('load', function () {
             .addEventListener('click', function () {
                 console.log("Reserve");
                 Reserve(id, coordinates);
+            });
+
+        document.getElementById('delete')
+            .addEventListener('click', function () {
+                console.log("Delete");
+                Delete(id);
             });
 
     });
@@ -385,7 +412,10 @@ function newDropoff(coords, counter, length) {
         }).done(function (data) {
             // Create a GeoJSON feature collection
             if (data.trips[0].distance == 0) {
-                window.alert('Don\'t choose the same point to form a trip!');
+                $("#result_box").fadeOut(function () {
+                    $("#result_count").html("Don\'t choose the same point to form a trip!");
+                });
+                $("#result_box").fadeIn();
                 return;
             }
             var routeGeoJSON = turf.featureCollection([turf.feature(data.trips[0].geometry)]);
@@ -406,7 +436,11 @@ function newDropoff(coords, counter, length) {
             }
 
             if (data.waypoints.length === 12) {
-                window.alert('Maximum number of points reached. Read more at mapbox.com/api-documentation/#optimization.');
+                $("#result_box").fadeOut(function () {
+                    $("#result_count").html("Maximum number of points reached. Read more at mapbox.com/api-documentation/#optimization.");
+                });
+                $("#result_box").fadeIn();
+
             }
         });
     }
@@ -420,7 +454,13 @@ function updateDropoffs(geojson) {
 
 function Reserve(id, coordinates) {
     location.href = "/reservations/Create?id=" + id;
-    console.log('try to reserve coords', name, coordinates);
+    console.log('try to reserve coords', id, coordinates);
+
+}
+
+function Delete(id) {
+    location.href = "/locations/Delete/" + id;
+    console.log('try to delete ', id);
 
 }
 
